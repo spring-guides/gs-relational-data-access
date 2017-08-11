@@ -49,7 +49,7 @@ include::complete/src/main/java/hello/Application.java[]
 ----
 
 `@SpringBootApplication` is a convenience annotation that adds all of the following:
-    
+
 - `@Configuration` tags the class as a source of bean definitions for the application context.
 - `@EnableAutoConfiguration` tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.
 - `@ComponentScan` tells Spring to look for other components, configurations, and services in the the `hello` package. In this case, there aren't any.
@@ -58,7 +58,7 @@ The `main()` method uses Spring Boot's `SpringApplication.run()` method to launc
 
 Spring Boot supports *H2*, an in-memory relational database engine, and automatically creates a connection. Because we are using *spring-jdbc*, Spring Boot automatically creates a `JdbcTemplate`. The `@Autowired JdbcTemplate` field automatically loads it and makes it available.
 
-This `Application` class implements Spring Boot's `CommandLineRunner`, which means it will execute the `run()` method after the application context is loaded up. 
+This `Application` class implements Spring Boot's `CommandLineRunner`, which means it will execute the `run()` method after the application context is loaded up.
 
 First, you install some DDL using `JdbcTemplate`'s `execute` method.
 
@@ -97,5 +97,15 @@ Congratulations! You've just used Spring to develop a simple JDBC client.
 
 NOTE: Spring Boot has many features for configuring and customizing the connection pool, for instance to connect to an external database instead of an in-memory one. Please refer to the http://docs.spring.io/spring-boot/docs/1.5.6.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[User Guide] for more detail.
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
+== See Also
 
+The following guides may also be helpful:
+
+* https://spring.io/guides/gs/accessing-data-jpa/[Accessing Data with JPA]
+* https://spring.io/guides/gs/accessing-data-mongodb/[Accessing Data with MongoDB]
+* https://spring.io/guides/gs/accessing-data-gemfire/[Accessing Data with GemFire]
+* https://spring.io/guides/gs/accessing-data-neo4j/[Accessing Data with Neo4j]
+* https://spring.io/guides/gs/accessing-data-mysql/[Accessing data with MySQL]
+* https://spring.io/guides/gs/spring-boot/[Building an Application with Spring Boot]
+
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
