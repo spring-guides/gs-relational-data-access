@@ -1,4 +1,4 @@
-:spring_boot_version: 2.1.3.RELEASE
+:spring_boot_version: 2.1.4.RELEASE
 :toc:
 :icons: font
 :source-highlighter: prettify
@@ -91,7 +91,7 @@ You should see the following output:
 == Summary
 Congratulations! You've just used Spring to develop a simple JDBC client.
 
-NOTE: Spring Boot has many features for configuring and customizing the connection pool, for instance to connect to an external database instead of an in-memory one. Please refer to the https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[User Guide] for more detail.
+NOTE: Spring Boot has many features for configuring and customizing the connection pool, for instance to connect to an external database instead of an in-memory one. Please refer to the http://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[User Guide] for more detail.
 
 == See Also
 
