@@ -1,0 +1,68 @@
+request0:
+  exception: []
+  keys: DROP TABLE customers IF EXISTS
+  values: 'false'
+request1:
+  exception: []
+  keys: CREATE TABLE customers(id SERIAL, first_name VARCHAR(255), last_name VARCHAR(255))
+  values: 'false'
+request2:
+  exception: []
+  keys: DatabaseMetaData:supportsBatchUpdates
+  values: 'true'
+request3:
+  exception: []
+  keys: ['INSERT INTO customers(first_name, last_name) VALUES (?,?)', '1', John, '2',
+    Woo, '1', Jeff, '2', Dean, '1', Josh, '2', Bloch, '1', Josh, '2', Long]
+  values: ['1', '1', '1', '1']
+request4:
+  exception: []
+  keys: ['SELECT id, first_name, last_name FROM customers WHERE first_name = ?', '1',
+    Josh]
+  values: ['3', ID, INTEGER, '4', '10', '0', FIRST_NAME, VARCHAR, '12', '255', '0',
+    LAST_NAME, VARCHAR, '12', '255', '0']
+request5:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', next]
+  values: 'true'
+request6:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', getLong, id]
+  values: '3'
+request7:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', getString, first_name]
+  values: Josh
+request8:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', getString, last_name]
+  values: Bloch
+request9:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', next, '#1']
+  values: 'true'
+request10:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', getLong, id, '#1']
+  values: '4'
+request11:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', getString, first_name, '#1']
+  values: Josh
+request12:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', getString, last_name, '#1']
+  values: Long
+request13:
+  exception: []
+  keys: [resultSet, 'SELECT id, first_name, last_name FROM customers WHERE first_name
+      = ?', next, '#2']
+  values: 'false'
