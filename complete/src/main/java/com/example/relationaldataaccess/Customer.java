@@ -1,4 +1,4 @@
-package hello;
+package com.example.relationaldataaccess;
 
 public class Customer {
     private long id;
@@ -19,4 +19,3 @@ public class Customer {
 
     // getters & setters omitted for brevity
 }
-
