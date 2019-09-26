@@ -3,95 +3,162 @@
 :icons: font
 :source-highlighter: prettify
 :project_id: gs-relational-data-access
+
 This guide walks you through the process of accessing relational data with Spring.
 
-== What you'll build
+== What You Will build
 
-You'll build an application using Spring's `JdbcTemplate` to access data stored in a relational database.
+You will build an application that uses Spring's `JdbcTemplate` to access data stored in a
+relational database.
 
-== What you'll need
+== What You Need
 
 :java_version: 1.8
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-gradle.adoc[]
+[[scratch]]
+== Starting with Spring Initializr
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-maven.adoc[]
+For all Spring applications, you should start with the https://start.spring.io[Spring
+Initializr]. The Initializr offers a fast way to pull in all the dependencies you need for
+an application and does a lot of the setup for you. This example needs the JDBC API and
+H2 Database dependencies. The following image shows the Initializr set up for this sample
+project:
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-sts.adoc[]
+image::images/initializr.png[]
 
+NOTE: The preceding image shows the Initializr with Maven chosen as the build tool. You
+can also use Gradle. It also shows values of `com.example` and `relational-data-access`
+as the Group and Artifact, respectively. You will use those values throughout the rest of
+this sample.
+
+The following listing shows the `pom.xml` file that is created when you choose Maven:
+
+====
+[src,xml]
+----
+include::initial/pom.xml[]
+----
+====
+
+The following listing shows the `build.gradle` file that is created when you choose Gradle:
+
+====
+[src,java]
+----
+include::initial/build.gradle[]
+----
+====
 
 [[initial]]
-== Create a Customer object
-The simple data access logic you will work with below manages first and last names of customers. To represent this data at the application level, create a `Customer` class.
+== Create a `Customer` Object
 
-`src/main/java/hello/Customer.java`
+The simple data access logic you will work with manages the first and last names of
+customers. To represent this data at the application level, create a `Customer` class, as
+the following listing (from
+`src/main/java/com/example/relationaldataaccess/Customer.java`) shows:
+
+====
 [source,java]
 ----
-include::complete/src/main/java/hello/Customer.java[]
+include::complete/src/main/java/com/example/relationaldataaccess/Customer.java[]
 ----
+====
 
+== Store and Retrieve Data
 
-== Store and retrieve data
+Spring provides a template class called `JdbcTemplate` that makes it easy to work with SQL
+relational databases and JDBC. Most JDBC code is mired in resource acquisition, connection
+management, exception handling, and general error checking that is wholly unrelated to
+what the code is meant to achieve. The `JdbcTemplate` takes care of all of that for you.
+All you have to do is focus on the task at hand. The following listing (from
+`src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java`)
+shows a class that can store and retrieve data over JDBC:
 
-Spring provides a template class called `JdbcTemplate` that makes it easy to work with SQL relational databases and JDBC. Most JDBC code is mired in resource acquisition, connection management, exception handling, and general error checking that is wholly unrelated to what the code is meant to achieve. The `JdbcTemplate` takes care of all of that for you. All you have to do is focus on the task at hand.
-
-`src/main/java/hello/Application.java`
+====
 [source,java]
 ----
-include::complete/src/main/java/hello/Application.java[]
+include::complete/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java[]
 ----
+====
 
 `@SpringBootApplication` is a convenience annotation that adds all of the following:
 
-- `@Configuration` tags the class as a source of bean definitions for the application context.
-- `@EnableAutoConfiguration` tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.
-- `@ComponentScan` tells Spring to look for other components, configurations, and services in the the `hello` package. In this case, there aren't any.
+- `@Configuration`: Tags the class as a source of bean definitions for the application
+context.
+- `@EnableAutoConfiguration`: Tells Spring Boot to start adding beans, based on classpath
+settings, other beans, and various property settings.
+- `@ComponentScan`: Tells Spring to look for other components, configurations, and
+services in the `com.example.relationaldataaccess` package. In this case, there are none.
 
-The `main()` method uses Spring Boot's `SpringApplication.run()` method to launch an application. Did you notice that there wasn't a single line of XML? No **web.xml** file either. This web application is 100% pure Java and you didn't have to deal with configuring any plumbing or infrastructure.
+The `main()` method uses Spring Boot's `SpringApplication.run()` method to launch an
+application.
 
-Spring Boot supports *H2*, an in-memory relational database engine, and automatically creates a connection. Because we are using *spring-jdbc*, Spring Boot automatically creates a `JdbcTemplate`. The `@Autowired JdbcTemplate` field automatically loads it and makes it available.
+Spring Boot supports H2 (an in-memory relational database engine) and automatically
+creates a connection. Because we use `spring-jdbc`, Spring Boot automatically creates a
+`JdbcTemplate`. The `@Autowired JdbcTemplate` field automatically loads it and makes it
+available.
 
-This `Application` class implements Spring Boot's `CommandLineRunner`, which means it will execute the `run()` method after the application context is loaded up.
+This `Application` class implements Spring Boot's `CommandLineRunner`, which means it will
+execute the `run()` method after the application context is loaded.
 
-First, you install some DDL using `JdbcTemplate`'s `execute` method.
+First, install some DDL by using the `execute` method of `JdbcTemplate`.
 
-Second, you take a list of strings and using Java 8 streams, split them into firstname/lastname pairs in a Java array.
+Second, take a list of strings and, by using Java 8 streams, split them into
+firstname/lastname pairs in a Java array.
 
-Then you install some records in your newly created table using `JdbcTemplate`'s `batchUpdate` method. The first argument to the method call is the query string, the last argument (the array of `Object` s) holds the variables to be substituted into the query where the "`?`" characters are.
+Then install some records in your newly created table by using the `batchUpdate` method of
+`JdbcTemplate`. The first argument to the method call is the query string. The last
+argument (the array of `Object` instances) holds the variables to be substituted into the
+query where the `?` characters are.
 
-NOTE: For single insert statements, `JdbcTemplate`'s `insert` method is good. But for multiple inserts, it's better to use `batchUpdate`.
+TIP: For single insert statements, the `insert` method of `JdbcTemplate` is good. However,
+for multiple inserts, it is better to use `batchUpdate`.
 
-NOTE: Use `?` for arguments to avoid https://en.wikipedia.org/wiki/SQL_injection[SQL injection attacks] by instructing JDBC to bind variables.
+IMPORTANT: Use `?` for arguments to avoid
+https://en.wikipedia.org/wiki/SQL_injection[SQL injection attacks] by instructing JDBC to
+bind variables.
 
-Finally you use the `query` method to search your table for records matching the criteria. You again use the "`?`" arguments to create parameters for the query, passing in the actual values when you make the call. The last argument is a Java 8 lambda used to convert each result row into a new `Customer` object.
+Finally, use the `query` method to search your table for records that match the criteria.
+You again use the `?` arguments to create parameters for the query, passing in the actual
+values when you make the call. The last argument is a Java 8 lambda that is used to
+convert each result row into a new `Customer` object.
 
-NOTE: Java 8 lambdas map nicely onto single method interfaces, like Spring's `RowMapper`. If you are using Java 7 or earlier, you can easily plug in an anonymous interface implementation and have the same method body as the lambda expresion's body contains, and it will work with no fuss from Spring.
+NOTE: Java 8 lambdas map nicely onto single method interfaces, such as Spring's
+`RowMapper`. If you use Java 7 or earlier, you can plug in an anonymous interface
+implementation and have the method body be the same as the lambda expression's body.
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_mainhead.adoc[]
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
 
 You should see the following output:
 
-....
-2015-06-19 10:58:31.152  INFO 67731 --- [           main] hello.Application                        : Creating tables
-2015-06-19 10:58:31.219  INFO 67731 --- [           main] hello.Application                        : Inserting customer record for John Woo
-2015-06-19 10:58:31.220  INFO 67731 --- [           main] hello.Application                        : Inserting customer record for Jeff Dean
-2015-06-19 10:58:31.220  INFO 67731 --- [           main] hello.Application                        : Inserting customer record for Josh Bloch
-2015-06-19 10:58:31.220  INFO 67731 --- [           main] hello.Application                        : Inserting customer record for Josh Long
-2015-06-19 10:58:31.230  INFO 67731 --- [           main] hello.Application                        : Querying for customer records where first_name = 'Josh':
-2015-06-19 10:58:31.242  INFO 67731 --- [           main] hello.Application                        : Customer[id=3, firstName='Josh', lastName='Bloch']
-2015-06-19 10:58:31.242  INFO 67731 --- [           main] hello.Application                        : Customer[id=4, firstName='Josh', lastName='Long']
-2015-06-19 10:58:31.244  INFO 67731 --- [           main] hello.Application                        : Started Application in 1.693 seconds (JVM running for 2.054)
-....
-
+====
+[source,bash]
+----
+2019-09-26 13:46:58.561  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Creating tables
+2019-09-26 13:46:58.564  INFO 47569 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-09-26 13:46:58.708  INFO 47569 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-09-26 13:46:58.809  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Inserting customer record for John Woo
+2019-09-26 13:46:58.810  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Inserting customer record for Jeff Dean
+2019-09-26 13:46:58.810  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Inserting customer record for Josh Bloch
+2019-09-26 13:46:58.810  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Inserting customer record for Josh Long
+2019-09-26 13:46:58.825  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Querying for customer records where first_name = 'Josh':
+2019-09-26 13:46:58.835  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Customer[id=3, firstName='Josh', lastName='Bloch']
+2019-09-26 13:46:58.835  INFO 47569 --- [           main] c.e.r.RelationalDataAccessApplication    : Customer[id=4, firstName='Josh', lastName='Long']
+----
+====
 
 == Summary
-Congratulations! You've just used Spring to develop a simple JDBC client.
 
-NOTE: Spring Boot has many features for configuring and customizing the connection pool, for instance to connect to an external database instead of an in-memory one. Please refer to the http://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[User Guide] for more detail.
+Congratulations! You have just used Spring to develop a simple JDBC client.
+
+NOTE: Spring Boot has many features for configuring and customizing the connection pool --
+for instance, to connect to an external database instead of an in-memory one. See the
+http://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[Reference Guide]
+for more detail.
 
 == See Also
 
