@@ -61,7 +61,7 @@ the following listing (from
 `src/main/java/com/example/relationaldataaccess/Customer.java`) shows:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/relationaldataaccess/Customer.java[]
 ----
@@ -78,7 +78,7 @@ All you have to do is focus on the task at hand. The following listing (from
 shows a class that can store and retrieve data over JDBC:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java[]
 ----
