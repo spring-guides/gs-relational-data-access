@@ -29,11 +29,11 @@ This service pulls in all the dependencies you need for an application and does 
 . Choose either Gradle or Maven and the language you want to use. This guide assumes that you chose Java.
 . Click *Dependencies* and select *JDBC API* and *H2 Database*.
 . Click *Generate*.
-. Download the resulting ZIP file, which is an archive of a web application that is configured with your choices.
+. Download the resulting ZIP file, which is an archive of a JDBC application that is configured with your choices.
 
 NOTE: If your IDE has the Spring Initializr integration, you can complete this process from your IDE.
 
-NOTE: You can also fork the project from Github and open it in your IDE or other editor.
+NOTE: You can also fork the project from GitHub and open it in your IDE or other editor.
 
 [[initial]]
 == Create a `Customer` Object
@@ -90,7 +90,7 @@ execute the `run()` method after the application context is loaded.
 First, install some DDL by using the `execute` method of `JdbcTemplate`.
 
 Second, take a list of strings and, by using Java 8 streams, split them into
-firstname/lastname pairs in a Java array.
+first name/last name pairs in a Java array.
 
 Then install some records in your newly created table by using the `batchUpdate` method of
 `JdbcTemplate`. The first argument to the method call is the query string. The last
@@ -106,7 +106,7 @@ bind variables.
 
 Finally, use the `query` method to search your table for records that match the criteria.
 You again use the `?` arguments to create parameters for the query, passing in the actual
-values when you make the call. The last argument is a Java 8 lambda that is used to
+values when you make the call. The second argument is a Java 8 lambda that is used to
 convert each result row into a new `Customer` object.
 
 NOTE: Java 8 lambdas map nicely onto single method interfaces, such as Spring's
@@ -140,7 +140,7 @@ Congratulations! You have just used Spring to develop a simple JDBC client.
 
 NOTE: Spring Boot has many features for configuring and customizing the connection pool --
 for instance, to connect to an external database instead of an in-memory one. See the
-http://docs.spring.io/spring-boot/docs/2.2.1.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[Reference Guide]
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#data.sql.datasource[Reference Guide]
 for more detail.
 
 == See Also

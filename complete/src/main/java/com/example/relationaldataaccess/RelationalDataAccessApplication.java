@@ -26,7 +26,6 @@ public class RelationalDataAccessApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... strings) throws Exception {
-
 		log.info("Creating tables");
 
 		jdbcTemplate.execute("DROP TABLE customers IF EXISTS");
@@ -39,15 +38,16 @@ public class RelationalDataAccessApplication implements CommandLineRunner {
 				.collect(Collectors.toList());
 
 		// Use a Java 8 stream to print out each tuple of the list
-		splitUpNames.forEach(name -> log.info(String.format("Inserting customer record for %s %s", name[0], name[1])));
+		splitUpNames.forEach(name -> log.info("Inserting customer record for {} {}", name[0], name[1]));
 
-		// Uses JdbcTemplate's batchUpdate operation to bulk load data
+		// Use JdbcTemplate's batchUpdate operation to bulk load data
 		jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", splitUpNames);
 
 		log.info("Querying for customer records where first_name = 'Josh':");
 		jdbcTemplate.query(
-				"SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" },
-				(rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))
+				"SELECT id, first_name, last_name FROM customers WHERE first_name = ?",
+				(rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name")),
+				"Josh"
 		).forEach(customer -> log.info(customer.toString()));
 	}
 }
