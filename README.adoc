@@ -20,33 +20,38 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [[scratch]]
 == Starting with Spring Initializr
 
-You can use this https://start.spring.io/#!type=maven-project&language=java&packaging=jar&jvmVersion=11&groupId=com.example&artifactId=relational-data-access&name=relational-data-access&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.relational-data-access&dependencies=jdbc,h2[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
+You can use this https://start.spring.io/#!type=maven-project&packaging=jar&jvmVersion=17&groupId=com.example&artifactId=relational-data-access&name=relational-data-access&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.relationaldataaccess&dependencies=jdbc,h2[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
 
 To manually initialize the project:
 
 . Navigate to https://start.spring.io.
 This service pulls in all the dependencies you need for an application and does most of the setup for you.
-. Choose either Gradle or Maven and the language you want to use. This guide assumes that you chose Java.
+. Choose either Gradle or Maven and the language you want to use.
 . Click *Dependencies* and select *JDBC API* and *H2 Database*.
 . Click *Generate*.
 . Download the resulting ZIP file, which is an archive of a web application that is configured with your choices.
 
 NOTE: If your IDE has the Spring Initializr integration, you can complete this process from your IDE.
 
-NOTE: You can also fork the project from Github and open it in your IDE or other editor.
+NOTE: You can also fork the project from GitHub and open it in your IDE or other editor.
 
 [[initial]]
 == Create a `Customer` Object
 
 The simple data access logic you will work with manages the first and last names of
 customers. To represent this data at the application level, create a `Customer` class, as
-the following listing (from
-`src/main/java/com/example/relationaldataaccess/Customer.java`) shows:
+the following listing shows:
 
 ====
-[source,java,tabsize=2]
+[source,java,indent=0,subs="verbatim,quotes",role="primary"]
+.Java
 ----
 include::complete/src/main/java/com/example/relationaldataaccess/Customer.java[]
+----
+[source,kotlin,indent=0,subs="verbatim,quotes",role="secondary"]
+.Kotlin
+----
+include::complete-kotlin/src/main/kotlin/com/example/relationaldataaccess/Customer.kt[]
 ----
 ====
 
@@ -56,14 +61,19 @@ Spring provides a template class called `JdbcTemplate` that makes it easy to wor
 relational databases and JDBC. Most JDBC code is mired in resource acquisition, connection
 management, exception handling, and general error checking that is wholly unrelated to
 what the code is meant to achieve. The `JdbcTemplate` takes care of all of that for you.
-All you have to do is focus on the task at hand. The following listing (from
-`src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java`)
-shows a class that can store and retrieve data over JDBC:
+All you have to do is focus on the task at hand. The following listing shows
+a class that can store and retrieve data over JDBC:
 
 ====
-[source,java,tabsize=2]
+[source,java,indent=0,subs="verbatim,quotes",role="primary"]
+.Java
 ----
 include::complete/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java[]
+----
+[source,kotlin,indent=0,subs="verbatim,quotes",role="secondary"]
+.Kotlin
+----
+include::complete-kotlin/src/main/kotlin/com/example/relationaldataaccess/RelationalDataAccessApplication.kt[]
 ----
 ====
 
@@ -89,8 +99,8 @@ execute the `run()` method after the application context is loaded.
 
 First, install some DDL by using the `execute` method of `JdbcTemplate`.
 
-Second, take a list of strings and, by using Java 8 streams, split them into
-firstname/lastname pairs in a Java array.
+Second, take a list of strings and split them into firstname/lastname pairs using streams in Java
+or collection functions in Kotlin.
 
 Then install some records in your newly created table by using the `batchUpdate` method of
 `JdbcTemplate`. The first argument to the method call is the query string. The last
@@ -109,9 +119,7 @@ You again use the `?` arguments to create parameters for the query, passing in t
 values when you make the call. The last argument is a Java 8 lambda that is used to
 convert each result row into a new `Customer` object.
 
-NOTE: Java 8 lambdas map nicely onto single method interfaces, such as Spring's
-`RowMapper`. If you use Java 7 or earlier, you can plug in an anonymous interface
-implementation and have the method body be the same as the lambda expression's body.
+NOTE: Lambdas map nicely onto single method interfaces, such as Spring's `RowMapper` (Java lambdas or Kotlin function literals with receivers).
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_mainhead.adoc[]
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_with_both.adoc[]
