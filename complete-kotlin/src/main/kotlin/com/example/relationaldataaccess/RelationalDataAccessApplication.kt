@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.query
 
 @SpringBootApplication
 class RelationalDataAccessApplication(
@@ -17,13 +18,15 @@ class RelationalDataAccessApplication(
         log.info("Creating tables")
 
         jdbcTemplate.execute("DROP TABLE IF EXISTS customers")
-        jdbcTemplate.execute("""
+        jdbcTemplate.execute(
+            """
             CREATE TABLE customers(
                 id SERIAL, 
                 first_name VARCHAR(255), 
                 last_name VARCHAR(255)
             )
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         // Split up the array of whole names into an array of first/last names
         val splitUpNames = listOf("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long")
@@ -38,19 +41,18 @@ class RelationalDataAccessApplication(
         jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", splitUpNames)
 
         log.info("Querying for customer records where first_name = 'Josh':")
-        jdbcTemplate.query(
-            "SELECT id, first_name, last_name FROM customers WHERE first_name = ?",
-            { rs, _ ->
-                Customer(
-                    rs.getLong("id"),
-                    rs.getString("first_name"),
-                    rs.getString("last_name")
-                )
-            },
-            "Josh"
-        ).forEach { customer ->
-            log.info(customer.toString())
+        // Import .query() Kotlin extension that allows varargs before lambda to enable trailing lambda syntax
+        jdbcTemplate.query("SELECT id, first_name, last_name FROM customers WHERE first_name = ?", "Josh")
+        { rs, _ ->
+            Customer(
+                rs.getLong("id"),
+                rs.getString("first_name"),
+                rs.getString("last_name")
+            )
         }
+            .forEach { customer ->
+                log.info(customer.toString())
+            }
     }
 }
 
