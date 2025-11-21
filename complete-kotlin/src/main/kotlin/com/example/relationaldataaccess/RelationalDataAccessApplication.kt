@@ -7,12 +7,11 @@ import org.springframework.boot.runApplication
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.query
 
+private val log = LoggerFactory.getLogger(RelationalDataAccessApplication::class.java)
+
 @SpringBootApplication
 class RelationalDataAccessApplication(
-    private val jdbcTemplate: JdbcTemplate
-) : CommandLineRunner {
-
-    private val log = LoggerFactory.getLogger(RelationalDataAccessApplication::class.java)
+    private val jdbcTemplate: JdbcTemplate) : CommandLineRunner {
 
     override fun run(vararg args: String) {
         log.info("Creating tables")
@@ -25,8 +24,7 @@ class RelationalDataAccessApplication(
                 first_name VARCHAR(255), 
                 last_name VARCHAR(255)
             )
-        """.trimIndent()
-        )
+        """.trimIndent())
 
         // Split up the array of whole names into an array of first/last names
         val splitUpNames = listOf("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long")

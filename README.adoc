@@ -36,7 +36,7 @@ NOTE: If your IDE has the Spring Initializr integration, you can complete this p
 NOTE: You can also fork the project from GitHub and open it in your IDE or other editor.
 
 [[initial]]
-== Create a `Customer` Object
+== Create a `Customer` class
 
 The simple data access logic you will work with manages the first and last names of
 customers. To represent this data at the application level, create a `Customer` class, as
