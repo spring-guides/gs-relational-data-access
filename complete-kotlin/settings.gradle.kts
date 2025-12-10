@@ -1,1 +1,1 @@
-rootProject.name = "relational-data-access"
+rootProject.name = "relational-data-access-complete"
